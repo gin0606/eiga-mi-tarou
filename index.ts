@@ -1,17 +1,18 @@
 import { encode } from "https://deno.land/std@0.133.0/encoding/base64.ts";
 import {
-  createBot,
-  startBot,
   Bot,
-  ScheduledEvent,
+  createBot,
   DiscordScheduledEvent,
+  ScheduledEvent,
+  startBot,
 } from "https://deno.land/x/discordeno@13.0.0-rc34/mod.ts";
 
 const tmdbApiKey = Deno.env.get("TMDB_API_TOKEN") || "";
 const discordBotToken = Deno.env.get("DISCORD_BOT_TOKEN") || "";
 
 async function fetchMovieDetail(query: string) {
-  const url = `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&language=ja-jp&query=${query}`;
+  const url =
+    `https://api.themoviedb.org/3/search/movie?api_key=${tmdbApiKey}&language=ja-jp&query=${query}`;
   const response = await fetch(url);
   return await response.json();
 }
@@ -47,7 +48,7 @@ async function updateForMovieEvent(bot: Bot, e: ScheduledEvent) {
         name: title,
         description: `${e.description}\n${overview}`,
         image: image,
-      }
+      },
     );
     bot.transformers.scheduledEvent(bot, event);
   }
