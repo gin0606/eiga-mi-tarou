@@ -27,6 +27,9 @@ async function fetchMovieImage(path: string) {
 }
 
 async function updateForMovieEvent(bot: Bot, e: ScheduledEvent) {
+  if (!e.description?.includes("映画")) {
+    return;
+  }
   const json = await fetchMovieDetail(e.name.split(" ").join("+"));
 
   if (json.results.length <= 0) {
@@ -63,9 +66,9 @@ const bot = createBot({
       console.log("Successfully connected to gateway");
     },
     scheduledEventCreate(bot, event) {
-      if (!event.description?.includes("映画")) {
-        return;
-      }
+      updateForMovieEvent(bot, event);
+    },
+    scheduledEventUpdate(bot, event) {
       updateForMovieEvent(bot, event);
     },
   },
