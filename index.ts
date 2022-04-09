@@ -38,9 +38,13 @@ async function updateForMovieEvent(bot: Bot, e: ScheduledEvent) {
     });
     return;
   }
-  const title = json.results[0].title;
-  const overview = json.results[0].overview;
-  const image = await fetchMovieImage(json.results[0].backdrop_path);
+  const popularResult = json.results.sort((a: any, b: any) => {
+    return b.popularity - a.popularity;
+  })[0];
+
+  const title = popularResult.title;
+  const overview = popularResult.overview;
+  const image = await fetchMovieImage(popularResult.backdrop_path);
 
   if (!e.description?.includes(overview)) {
     const event = await bot.rest.runMethod<DiscordScheduledEvent>(
