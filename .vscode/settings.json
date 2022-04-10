@@ -1,4 +1,11 @@
 {
-  "cSpell.words": ["deno", "denoland", "discordeno", "tarou", "tmdb"],
+  "cSpell.words": [
+    "deno",
+    "denoland",
+    "discordeno",
+    "tarou",
+    "themoviedb",
+    "tmdb"
+  ],
   "deno.enable": true
 }
