@@ -5,7 +5,7 @@ import { parse } from "https://deno.land/std@0.134.0/flags/mod.ts";
 
 const parsedArgs = parse(Deno.args);
 
-if (parsedArgs["with-server"]) {
+if (parsedArgs["keepalive"]) {
   const argPort = parsedArgs.port || "8080";
   const port = Number(argPort);
 
@@ -15,9 +15,25 @@ if (parsedArgs["with-server"]) {
     },
     { port },
   );
-  console.log(
-    `HTTP webserver running.  Access it at:  http://localhost:${port}/`,
-  );
+
+  const keepaliveURL = Deno.env.get("HEROKU_KEEPALIVE_URL") ||
+    Deno.env.get("HEROKU_URL") || "";
+  const keepaliveInterval = Deno.env.get("KEEPALIVE_INTERVAL")
+    ? Number(Deno.env.get("KEEPALIVE_INTERVAL"))
+    : 10;
+
+  if (keepaliveURL.length > 0 && keepaliveInterval > 0) {
+    setInterval(async () => {
+      console.log("keepalive ping");
+
+      try {
+        const response = await fetch(keepaliveURL);
+        console.log(`keepalive pong: ${response.status} ${response.body}`);
+      } catch (error) {
+        console.log(`keepalive pong: ${error}`);
+      }
+    }, keepaliveInterval * 60 * 1000);
+  }
 }
 
 await startBot();
