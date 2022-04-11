@@ -20,7 +20,7 @@ if (parsedArgs["keepalive"]) {
     Deno.env.get("HEROKU_URL") || "";
   const keepaliveInterval = Deno.env.get("KEEPALIVE_INTERVAL")
     ? Number(Deno.env.get("KEEPALIVE_INTERVAL"))
-    : 10;
+    : 25;
 
   if (keepaliveURL.length > 0 && keepaliveInterval > 0) {
     setInterval(async () => {
