@@ -28,7 +28,8 @@ if (parsedArgs["keepalive"]) {
 
       try {
         const response = await fetch(keepaliveURL);
-        console.log(`keepalive pong: ${response.status} ${response.body}`);
+        const body = response.text();
+        console.log(`keepalive pong: ${response.status} ${body}`);
       } catch (error) {
         console.log(`keepalive pong: ${error}`);
       }
